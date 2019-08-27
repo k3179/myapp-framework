@@ -16,10 +16,11 @@ body {
     padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px) env(safe-area-inset-right, 0px);
 }
 
-#cover  {position:fixed;width:100%;height:100%;top:0;left:0;z-index:2;opacity:1;background-color:#ffffff;transition:.5s;}
+#cover  {position:fixed;width:100%;height:100%;top:0;left:0;z-index:2;opacity:1;background-color:#ffffff;transition:.5s;display:flex;}
 .cover-hide   {opacity:0 !important;}
+#cover  .logo   {flex:auto;display:flex;justify-content: center;align-items: center;}
 #cover .content {
-    position:fixed;bottom:0;padding:20px 0;width:100%;background-color:#ffffff;
+    position:fixed;flex:none;bottom:0;padding:1.5em 0;width:100%;background-color:#ffffff;
     text-align:center;
 }
 #cover .content  h1 {
