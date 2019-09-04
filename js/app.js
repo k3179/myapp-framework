@@ -8,12 +8,43 @@ var app = {
     html : {},
     services : {},
     layers : [],
+    moving : false,
     z : 1,
+
+    // device
+    device : {
+        ios : false,
+        android : false,
+        width : 0,
+        height : 0,
+    },
+
 
     // Application Constructor
     init: function(){
         this.bind();
+        this.initDevice();
     },
+
+
+    initDevice : function(){
+        if(window.device){
+            this.ios    =   device.platform === "iOS";
+            this.android    =   device.platform === "Android";
+        }else{
+            this.ios    =   /iphone|ipad|ipod/i.test(window.navigator.platform);
+            this.android    =   /android|linux/i.test(window.navigator.platform);
+        }
+        this.device.width  =   $(window).width();
+        this.device.height  =   $(window).height();
+        if(this.ios){
+            this.height -= 20;
+        }
+        if(this.debug){
+            this.android    =   true;
+        }
+    },
+
     bind : function(){
         document.addEventListener('deviceready', this.onReady.bind(this), false);
         document.addEventListener('pause', this.onPause.bind(this), false);
@@ -76,13 +107,6 @@ var app = {
         module._bind();
         module._init(param);
         module._show();
-
-        /*
-        module._load(id,function(){
-            module._init(param);
-            module._show();
-        });
-        */
     }
 
 };
