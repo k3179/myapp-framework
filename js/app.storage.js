@@ -20,7 +20,7 @@ app.storage = {
         var _data = {};
         _data.data = data;
         _data.version = app.version.code;
-        _data.time = (new Date).getTime();
+        _data.time = parseInt((new Date).getTime() / 1000);
         var value = JSON.stringify(_data);
         this._set(name,value);
     },
@@ -34,69 +34,37 @@ app.storage = {
             return null;
         }
         
-        if(!option){
-            return _data.data;
-        }
         if(option){
-
-        }else{
-            
+            if(option.expire){
+                var seconds = this._getExpireTime(option.expire);
+                var nowTime = this._getTime();
+                if(_data.time < (nowTime - seconds)){
+                    return null;
+                }
+            }
         }
+        return _data.data;
     },
     remove: function (name) {
         this.storage.removeItem(name);
     },
-    setJson: function (name, obj) {
-        var data = {};
-        data._data = obj;
-        data._m_time = (new Date).getTime();
-        var value = JSON.stringify(data);
-        this.set(name,value);
+    _getTime : function(){
+        return parseInt((new Date).getTime() / 1000);
     },
-    getJson : function(){
-        var value,  data;
-        value = this.storage.getItem(name);
-        if (!value) {
-            return null;
+    _getExpireTime: function (time_value) {
+        var type,num,seconds;
+        type = time_value.substr(-1).toLowerCase();
+        num = parseInt(time_value.substr(0, (time_value.length - 1)));
+        if (type === 's') {
+            seconds = num;
+        } else if (type === 'm') {
+            seconds = num * 60;
+        } else if (type === 'h') {
+            seconds = num * 60 * 60;
+        } else if (type === 'd') {
+            seconds = num * 60 * 60 * 24;
         }
-        return JSON.parse(value);
-    },
-    getJsonByTime: function (name, time_value) {
-        var value, tmp, data, _m_time, type, num, mseconds;
-        value = this.storage.getItem(name);
-        if (!value) {
-            return null;
-        }
-        tmp = JSON.parse(value);
-        if (!tmp._data || !tmp._m_time) {
-            return null;
-        }
-        data = tmp._data;
-        _m_time = tmp._m_time;
-        if (time_value) {
-            type = time_value.substr(-1).toLowerCase();
-            num = parseInt(time_value.substr(0, (time_value.length - 1)));
-            if (type === 's') {
-                mseconds = num * 1000;
-            } else if (type === 'm') {
-                mseconds = num * 1000 * 60;
-            } else if (type === 'h') {
-                mseconds = num * 1000 * 60 * 60;
-            } else if (type === 'd') {
-                mseconds = num * 1000 * 60 * 60 * 24;
-            }
-            if (!mseconds) {
-                return data;
-            } else {
-                if ((_m_time + mseconds) > ((new Date).getTime())) {
-                    return data;
-                } else {
-                    return null;
-                }
-            }
-        } else {
-            return data;
-        }
+        return seconds;
     }
 
 };

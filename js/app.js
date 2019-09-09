@@ -36,7 +36,6 @@ var app = {
 
     // init device 
     initDevice : function(){
-        console.log(window.navigator.platform);
         if(window.device){
             this.device.ios    =   device.platform === "iOS";
             this.device.android    =   device.platform === "Android";
@@ -49,10 +48,6 @@ var app = {
         if(this.device.ios){
             this.height -= 20;
         }
-        if(this.debug){
-            //this.android    =   true;
-        }
-        console.log(this.device);
     },
 
     exit: function(){
