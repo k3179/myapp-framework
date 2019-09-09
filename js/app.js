@@ -22,34 +22,37 @@ var app = {
 
     // Application Constructor
     init: function(){
-        this.bind();
+        this.bindCordova();
         this.initDevice();
     },
 
 
-    initDevice : function(){
-        if(window.device){
-            this.ios    =   device.platform === "iOS";
-            this.android    =   device.platform === "Android";
-        }else{
-            this.ios    =   /iphone|ipad|ipod/i.test(window.navigator.platform);
-            this.android    =   /android|linux/i.test(window.navigator.platform);
-        }
-        this.device.width  =   $(window).width();
-        this.device.height  =   $(window).height();
-        if(this.ios){
-            this.height -= 20;
-        }
-        if(this.debug){
-            this.android    =   true;
-        }
-    },
-
-    bind : function(){
+    bindCordova : function(){
         document.addEventListener('deviceready', this.onReady.bind(this), false);
         document.addEventListener('pause', this.onPause.bind(this), false);
         document.addEventListener('resume', this.onResume.bind(this), false);
         document.addEventListener('backbutton', this.onBack.bind(this), false);
+    },
+
+    // init device 
+    initDevice : function(){
+        console.log(window.navigator.platform);
+        if(window.device){
+            this.device.ios    =   device.platform === "iOS";
+            this.device.android    =   device.platform === "Android";
+        }else{
+            this.device.ios    =   /iphone|ipad|ipod/i.test(window.navigator.platform);
+            this.device.android    =   /android|linux/i.test(window.navigator.platform);
+        }
+        this.device.width  =   $(window).width();
+        this.device.height  =   $(window).height();
+        if(this.device.ios){
+            this.height -= 20;
+        }
+        if(this.debug){
+            //this.android    =   true;
+        }
+        console.log(this.device);
     },
 
     exit: function(){
@@ -80,6 +83,11 @@ var app = {
             app.exit();
         });
     },
+
+    handleError: function(error){
+        app.notification.alert(error.message);
+    },
+
 
     loadModule : function(id,param){
         if(app.modules[id]){
