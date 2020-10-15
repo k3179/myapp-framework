@@ -8,6 +8,7 @@ app.modules.moduleLayer.prototype = $.extend({},app.module.layer,{
         var self = this;
         $('form',this.$module).submit(function(){
             console.log(self);
+            
             return false;
         });
     }
